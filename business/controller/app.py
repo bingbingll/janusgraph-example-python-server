@@ -1,8 +1,7 @@
-import json
-
-from flask import jsonify, Response
 from flask import Flask
-from business.config import gremlinConfig
+from flask import jsonify
+
+from janusgraph import gremlinConfig
 from test import dataload
 
 app = Flask(__name__)

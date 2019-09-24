@@ -1,9 +1,6 @@
-from gremlin_python.process.anonymous_traversal import traversal
 from gremlin_python.driver import client
-from gremlin_python import statics
-from gremlin_python.structure.graph import Graph
-from gremlin_python.process.graph_traversal import __
 from gremlin_python.driver.driver_remote_connection import DriverRemoteConnection
+from gremlin_python.structure.graph import Graph
 
 url = '172.16.2.137:8182'
 
@@ -11,13 +8,14 @@ url = '172.16.2.137:8182'
 # 获取GraphTraversalSource对象
 def get_graph():
     graph = Graph()
-    g = graph.traversal().withRemote(DriverRemoteConnection('ws://'+url+'/gremlin', 'g', pool_size=20, max_workers=15))
+    g = graph.traversal().withRemote(
+        DriverRemoteConnection('ws://' + url + '/gremlin', 'g', pool_size=20, max_workers=15))
     return g
 
 
 # 获取客户端
 def get_client():
-    clients = client.Client('ws://'+url+'/gremlin', 'g', pool_size=20, max_workers=15)
+    clients = client.Client('ws://' + url + '/gremlin', 'g', pool_size=20, max_workers=15)
     return clients
 
 
@@ -203,6 +201,7 @@ def get_edge_id(edge):
     """
     return edge.id.get('@value').get('relationId')
 
+
 # 节点属性转字典
 def vertex_to_dict(graph, vertex):
     """
@@ -219,6 +218,7 @@ def vertex_to_dict(graph, vertex):
         'label': vertex.label,
         'properties': properties
     }
+
 
 # 边属性转dict
 def edge_to_dict(graph, edge):
@@ -257,5 +257,3 @@ def judge_vertex_in_graph(graph, vertex_dict):
     if travel.hasNext():
         return travel.next()
     return None
-
-
