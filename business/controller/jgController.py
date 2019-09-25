@@ -1,19 +1,11 @@
-from flask import Flask
+# -*- coding: utf-8 -*-
 from flask import jsonify
 
+from config.app import app
 from janusgraph import gremlinConfig
-from test import dataload
-
-app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False  # 中文不进行ASCII转换
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
-
-@app.route('/getAllVertex1', methods=['GET'])
+@app.route('/jg/getAllVertex1', methods=['GET'])
 def get_all_vertex_1():
     g = gremlinConfig.get_graph()
     vl = g.V().toList()
@@ -27,7 +19,7 @@ def get_all_vertex_1():
     return jsonify(result)
 
 
-@app.route('/getAllVertex2', methods=['GET'])
+@app.route('/jg/getAllVertex2', methods=['GET'])
 def get_all_vertex_2():
     g = gremlinConfig.get_graph()
     vs = g.V().valueMap(True).toList()
@@ -41,13 +33,13 @@ def get_all_vertex_2():
     return jsonify(result)
 
 
-@app.route('/delId')
+@app.route('/jg/delId')
 def del_id():
     gremlinConfig.drop_vertex(gremlinConfig.get_graph(), 110123456789123456)
     return '成功'
 
 
-@app.route('/addVer')
+@app.route('/jg/addVer')
 def add_ver():
     prp1 = {'age': 32, 'addr': '北京市昌平区', 'phone': '13812345678', 'xuli': '本科', 'no': '110123456789123456'}
     gremlinConfig.add_vertex(gremlinConfig.get_graph(), '张明', prp1)
@@ -60,26 +52,7 @@ def add_ver():
     return '成功'
 
 
-@app.route('/get', methods=['GET'])
+@app.route('/jg/get', methods=['GET'])
 def get():
     v = gremlinConfig.query_edges_of_vertex(gremlinConfig.get_graph(), 28672)
     return jsonify(v)
-
-
-@app.route('/ins', methods=['GET'])
-def instest():
-    dataload.inst_test()
-    return 'ok'
-
-
-@app.route('/getall', methods=['GET'])
-def getall():
-    data = dataload.query_test()
-    # 返回字符串
-    # return json.dumps(data, ensure_ascii=False)
-    return jsonify(data)
-
-
-if __name__ == '__main__':
-    '''若是pycharm 开发工具这里设置不起作用，需要在编辑设置 FLASK_DEBUG 进行勾选'''
-    # app.run(debug=True)

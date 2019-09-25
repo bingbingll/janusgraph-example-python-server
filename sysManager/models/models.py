@@ -1,11 +1,12 @@
-from sqlalchemy import Integer, String, Column, UniqueConstraint, Index, Table
+from flask_login import UserMixin
+from sqlalchemy import Integer, String, Column, UniqueConstraint, Index
 
 from sysManager.config.database import pgsql, init_db
 
 
 # TODO: 参考注释 --> https://www.jianshu.com/nb/32362137
 
-class User(pgsql.Base):
+class Users(UserMixin, pgsql.Base):
     __tablename__ = 'users'
     id = Column('id', Integer, primary_key=True)
     name = Column('name', String(50), unique=True)
@@ -33,7 +34,7 @@ class User(pgsql.Base):
         return dict
 
 
-class Unit(pgsql.Base):
+class Units(pgsql.Base):
     __tablename__ = 'units'
     id = Column('id', Integer, primary_key=True)
     name = Column('name', String(50), unique=True)
